@@ -116,14 +116,14 @@ mariaDBでユーザーとデータベースを作る。
     # `restorecon -R -v /var/www/html/wpress/wp-content`　←　変更設定を 更新
 
     # `setsebool -P allow_ftpd_full_access 1`　←　pluginやthemeの追加に 必要なftpへのフルアクセスを許可
-
     # `systemctl restart httpd`　←　httpdの再起動
-
+    
+    # `systemctl stop firewalld` 
 ##WordPress初期設定
 
 1. http://サーバー名/wpress/へアクセスし、表示される赤枠「設定ファイルを作成する」1をクリック
 2. 表示される画面の「さあ、始めましょう！」をクリックj
-3. 表示される画面にMySQLで作成した「データベース名」、「ユーザー名」、「パスワード」を入力して、「送信」をクリック
+3. 表示される画面にMySQLで作成した「データベース名」、「ユーザー名」、「パスワード」を入力して、「送信`」をクリック
 4. 表示される画面の「インストール実行」をクリック
 5. 表示される画面のの全項目を埋め、の「WordPressをインストール」をクリック
 6. 表示される画面の「ログイン」をクリック
