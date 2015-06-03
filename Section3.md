@@ -46,7 +46,7 @@ proxyを設定するためにvagrantのpluginをインストール
 
 ## playbookを書く
 
-[playbook]{./playbook}
+[playbook](http://github.com/n14009/Serverbuilding/blob/master/ansible/playbook.yml)
 
 playbookを書いたらブラウザで自分のipアドレスに接続したら3-1終了です
 
