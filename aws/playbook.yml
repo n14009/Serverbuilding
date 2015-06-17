@@ -1,0 +1,86 @@
+---
+- hosts: all 
+  vars:
+    rootpw: hoge 
+  sudo: yes
+  user: ec2-user
+  tasks:
+    - name: nginx repository install
+      yum: name=http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm state=installed
+
+    - name: be sure php is installed  
+      yum: name={{ item }} state=installed
+      with_items:
+        - php-mysql
+        - php-mbstring
+        - php-fpm 
+        
+    - name: Copy php-fpm configuration 
+      copy: src=temp/www.conf dest=/etc/php-fpm.d/ 
+
+    - name: be sure nginx is installed
+      yum: name=nginx state=installed
+
+    - name: Copy nginx configuration for wordpress
+      copy: src=temp/default.conf dest=/etc/nginx/conf.d/
+    
+    - name: be sure mysql is installed
+      yum: name={{ item }} state=installed
+      with_items:
+        - mysql-server
+        - MySQL-python27
+
+        
+    - name: mariadb start
+      service: name={{ item }} state=started enabled=yes
+      with_items:
+        - nginx 
+        - mysqld
+        - php-fpm
+
+    - name: root passwd
+      mysql_user:
+        name: root
+        host: localhost
+        password: 'hoge' 
+        state: present
+
+    - name: Create Mysql configuration file
+      copy: src=./temp/my.cnf.j2 dest=/etc/my.cnf owner=root mode=0600
+    - name: create dateabase
+      mysql_db:
+        name: wddb 
+        state: present 
+        encoding: utf8
+        login_user: root
+        login_password: "{{ rootpw }}"
+       
+
+    - name: user add
+      mysql_user:
+        name: n14009
+        priv: "*.*:ALL"
+        password: 'hoge'
+        state: present
+        login_user: root 
+        login_password: hoge
+        
+    - name: Download wordpress
+      get_url:
+        url: http://wordpress.org/latest.tar.gz
+        dest: /home/latest.tar.gz 
+
+    - name: archive
+      shell: chdir=/usr/share/nginx/ creates=/usr/share/nginx/wordpress /bin/tar xvf /home/latest.tar.gz
+
+    - name: Change ownership of WordPress installation
+      file:
+        path: /usr/share/nginx/wordpress/
+        owner: nginx
+        group: nginx
+        state: directory
+        recurse: yes      
+
+
+
+
