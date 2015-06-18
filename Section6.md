@@ -119,11 +119,17 @@ Route53はAWSが提供するDNSサービス。
 
 ## 6-5 CloudFront
 
-CloudFrontはCDNサービスです。CDNって何って?ggrましょう(ちゃんと講義では説明するので聞いてね)。
+1. AMIからインスタンスを作成
 
-6-1で作ったAMIを起動し、CloudFrontに登録します。登録して直接アクセスするのとCloudFront経由するのどっちが速いかベンチマークを取ってみましょう。
+2. AWSコンソール画面からcloud front を選択
 
-また、CloudFrondを経由することで、地域ごとにアクセス可能にしたり不可にしたりできるので、それを試してみましょう。
+3. Create Distribution を選択する
+
+4. Origin ID に EC2のパブリックDNSを入力、そして Create Distribution Origin をクリックする。
+
+5. 作ったDistributionがIn Progress からDeployedになったらDomain Nameをwebで入力してベンチマークを取る。同様にEC2からもwebアクセスしてベンチマークを取る。cloud front からアクセスした場合は243で普通にアクセスした場合は212で
+
+6. 5の結果からcloud front を使った方が早いことがわかったので6-5終了です。
 
 ## 6-6 RDS
 
